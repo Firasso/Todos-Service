@@ -1,0 +1,10 @@
+version: "3"
+services:
+  api-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    command: "CompileDaemon -build='echo skip build >dev/null' -command='go test ./...'"
+    restart: on-failure
+    volumes:
+      - ./:/go/src/github.com/Firasso/DemoGoApi

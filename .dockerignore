@@ -1,0 +1,22 @@
+.git
+
+.cash
+
+docker-compose*
+Dockerfile*
+
+**/infra
+**/.aws
+
+**.env
+
+*.md
+
+# postgresql database files for local development
+database
+
+# Grafana database files for local development
+grafana_data
+
+# Prometheus database files for local development
+prometheus-data

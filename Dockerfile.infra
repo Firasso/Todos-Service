@@ -1,0 +1,14 @@
+FROM amazon/aws-cli
+WORKDIR /work
+
+RUN yum install -y jq gzip nano tar git unzip wget make
+
+RUN curl -o /tmp/terraform.zip -LO https://releases.hashicorp.com/terraform/0.13.1/terraform_0.13.1_linux_amd64.zip
+RUN unzip /tmp/terraform.zip
+RUN chmod +x terraform && mv terraform /usr/local/bin/
+
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin/kubectl
+
+ENTRYPOINT [ "/bin/sh" ]

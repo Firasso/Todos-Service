@@ -1,0 +1,14 @@
+version: "3.7"
+
+# this is a development container that has all the dev dependencies ready
+# check README file for instructions
+services:
+  aws:
+    container_name: aws
+    build:
+      context: .
+      dockerfile: Dockerfile.infra
+    volumes:
+      - ./:/work
+      - ./infra/.aws:/root/.aws
+      - ./infra/.kube:/root/.kube

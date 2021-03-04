@@ -1,0 +1,71 @@
+version: "3"
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: "CompileDaemon -build='make build' -command='./build/Demo-app' -exclude-dir=.git -exclude='.#*' -exclude='*_test.go'"
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - database
+    volumes:
+      - ./:/go/src/github.com/Firasso/DemoGoApi
+
+  database:
+    image: "postgres" # use latest official postgres version
+    container_name: database
+    env_file:
+      - .env # configure postgres
+    ports:
+      - "54320:5432" # exposed on high port locally
+    volumes:
+      - ./database:/var/lib/postgresql/data/ # persist data even if container shuts down
+      - ./sql:/sql # to run sql files in the container for dev/debugging
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    restart: always
+    depends_on:
+      - nodeexporter
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus-data"
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - ./prometheus-data:/prometheus-data # persists data even if container restarted
+
+  nodeexporter:
+    container_name: nodeexporter
+    image: prom/node-exporter
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 30000:3000 # exposed on high port locally
+    volumes:
+      - ./grafana_data:/var/lib/grafana # persist data even if container shuts down
+      - ./grafana/provisioning:/etc/grafana/provisioning # provisions prometheus data source and some default dashboards
+
+  swagger:
+    container_name: swagger
+    image: swaggerapi/swagger-ui
+    environment:
+      "SWAGGER_JSON": "/docs/swagger.yaml"
+      "BASE_URL": "/docs"
+      "LAYOUT": "BaseLayout"
+    # ports:
+    #   - 8080:8080 # uncomment for debug use
+    volumes:
+      - ./docs:/docs

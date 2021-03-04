@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS todos;
+
+CREATE TABLE todos (
+    id SERIAL PRIMARY KEY ,
+    uuid VARCHAR (50)  NOT NULL UNIQUE,
+    text VARCHAR (200) NOT NULL,
+    completed BOOLEAN DEFAULT FALSE,
+    created_on TIMESTAMP NOT NULL DEFAULT NOW()
+);

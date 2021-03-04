@@ -1,0 +1,54 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  Todo:
+    properties:
+      completed:
+        type: boolean
+        x-go-name: Completed
+      created_on:
+        type: string
+        x-go-name: CreatedOn
+      text:
+        type: string
+        x-go-name: Text
+      uuid:
+        $ref: '#/definitions/UUID'
+    type: object
+    x-go-package: github.com/Firasso/DemoGoApi/types
+  UUID:
+    description: |-
+      UUID representation compliant with specification
+      described in RFC 4122.
+    items:
+      format: uint8
+      type: integer
+    type: array
+    x-go-package: github.com/satori/go.uuid
+info:
+  description: Documentation for Todos API
+  title: Todos API
+  version: 1.0.0
+paths:
+  /todos:
+    get:
+      description: Returns a list of todos
+      operationId: list
+      responses:
+        "200":
+          $ref: '#/responses/todosResponse'
+      tags:
+      - todos
+produces:
+- application/json
+responses:
+  todosResponse:
+    description: A todosResponse.
+    schema:
+      items:
+        $ref: '#/definitions/Todo'
+      type: array
+schemes:
+- http
+swagger: "2.0"

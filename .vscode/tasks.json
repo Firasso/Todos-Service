@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "golangci-lint",
+      "type": "shell",
+      "command": "golangci-lint run -v --new-from-rev=master"
+    },
+    {
+      "label": "terraform format",
+      "type": "shell",
+      "command": "terraform fmt -recursive"
+    }
+  ]
+}
